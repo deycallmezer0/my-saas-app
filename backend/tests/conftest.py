@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from backend.app.models import user  # ✅ Ensures User model is registered
 from backend.app.main import app
-from backend.app.db import Base, get_db
+from backend.app.core.database import Base, get_db
 from backend.app.models.user import User
 import os
 from dotenv import load_dotenv

@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel, EmailStr
-from backend.app.db import get_db
+from backend.app.core.database import get_db
 from backend.app.models.user import User
 from backend.app.services.auth import get_password_hash, verify_password
 from sqlalchemy.orm import Session
