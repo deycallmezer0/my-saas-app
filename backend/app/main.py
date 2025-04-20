@@ -1,21 +1,21 @@
 from fastapi import FastAPI
-from app.api import jobs
-from app.core.database import engine, Base
-# Import all models to ensure they're registered with SQLAlchemy
-from app.models import job, user, tag
+from backend.app.api.routes import router  # Use absolute import path
+from backend.app.core.database import engine, Base
+# Import all models to ensure they're registered
+from backend.app.models.user import User
 
 # Create the database tables
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
-    title="Job Tracker API",
-    description="API for tracking job applications",
+    title="User Authentication API",
+    description="API for user authentication",
     version="0.1.0"
 )
 
-# Include routers
-app.include_router(jobs.router)
+# Include your router
+app.include_router(router)
 
 @app.get("/", tags=["root"])
 def read_root():
-    return {"message": "Welcome to the Job Tracker API"}
+    return {"message": "Welcome to the API"}

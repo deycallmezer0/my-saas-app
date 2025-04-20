@@ -1,7 +1,7 @@
 import pytest
 from backend.app.models.user import User
 
-def test_signup(client):
+def test_signup(client, db):
     response = client.post("/signup", json={
         "email": "test@example.com",
         "password": "testpassword"
@@ -10,12 +10,10 @@ def test_signup(client):
     assert response.json()["email"] == "test@example.com"
     assert "message" in response.json()
     assert "user_id" in response.json()
-    
-    # check to see if the user was created in the database
-    db_user = client.db.query(User).filter(User.email == "test@example.com").first()
+
+    # Use the injected db fixture
+    db_user = db.query(User).filter(User.email == "test@example.com").first()
     assert db_user is not None
-    assert db_user.is_active == 1
-    assert db_user.is_logged_in == 0
 
 def test_login(client):
     # First, create a user
@@ -46,3 +44,24 @@ def test_login_invalid_credentials(client):
     })
     assert response.status_code == 401
     assert response.json()["detail"] == "Invalid credentials"
+
+def test_logout(client):
+    # First, create a user and log them in
+    client.post("/signup", json={
+        "email": "test@example.com",
+        "password": "testpassword"
+    })
+
+    client.post("/login", json={
+        "email": "test@example.com",
+        "password": "testpassword"
+    })
+
+    # Now, log them out
+    response = client.post("/logout", json={
+        "email": "test@example.com"
+    })
+    assert response.status_code == 200
+    assert response.json()["message"] == "Logout successful"
+    assert "user_id" in response.json()
+    

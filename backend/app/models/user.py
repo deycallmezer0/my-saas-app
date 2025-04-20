@@ -1,8 +1,6 @@
 # SQLAlchemy models
 from sqlalchemy import Column, Integer, String
-from sqlalchemy.ext.declarative import declarative_base
-
-Base = declarative_base()
+from backend.app.core.database import Base  # Import Base from database.py
 
 class User(Base):
     __tablename__ = 'users'
@@ -11,4 +9,3 @@ class User(Base):
     hashed_password = Column(String)
     is_active = Column(Integer, default=1)
     is_logged_in = Column(Integer, default=0)
-

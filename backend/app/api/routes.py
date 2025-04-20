@@ -37,3 +37,15 @@ def login(user: UserLogin, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(db_user)
     return {"message": "Login successful", "user_id": db_user.id}
+
+@router.post("/logout")
+def logout(user: UserLogin, db: Session = Depends(get_db)):
+    db_user = db.query(User).filter(User.email == user.email).first()
+    if not db_user:
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+    if not db_user.is_logged_in:
+        raise HTTPException(status_code=400, detail="User already logged out")
+    db_user.is_logged_in = 0
+    db.commit()
+    db.refresh(db_user)
+    return {"message": "Logout successful", "user_id": db_user.id}
