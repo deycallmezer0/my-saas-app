@@ -6,3 +6,4 @@ python-dotenv
 passlib
 pydantic[email-validator]
 bcrypt
+psycopg2-binary
